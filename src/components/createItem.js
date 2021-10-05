@@ -18,6 +18,9 @@ const CreateItem = props => {
 
     const categoryPlaceholder = `New ${isParent ? "category" : "subcategory"} name`;
 
+    /*
+    Function handles data in proper way and puts the result to database method add and sets dependant values to their initial state
+     */
     const handleNewItem = () => {
         if (!window.confirm(ADD_NEW_ITEM))
             return false;
@@ -43,6 +46,9 @@ const CreateItem = props => {
             });
     };
 
+    /*
+    Function finds element from the initial (non-filtered) list
+     */
     const parentElement = list
         .find(value => value.id === parentItemId);
 

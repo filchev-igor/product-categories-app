@@ -1,6 +1,9 @@
 import {ChildItemContext} from "../contexts";
 import {useContext} from "react";
 
+/*
+Function returns context values for simplifying it's overuse
+ */
 const useChildItem = () => {
     const {
         parentItemId, setParentItemId,

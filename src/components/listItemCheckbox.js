@@ -13,6 +13,9 @@ const ListItemCheckbox = ({id, elementOrder}) => {
     const [isChecked, setIsChecked] = useState(false);
     const effectRef = useRef({});
 
+    /*
+    effectRef variable helps to exclude used values from the UseEffect update states
+     */
     effectRef.current.parentItemId = parentItemId;
     effectRef.current.setParentItemId = setParentItemId;
     effectRef.current.setIsParent = setIsParent;
@@ -23,9 +26,16 @@ const ListItemCheckbox = ({id, elementOrder}) => {
     effectRef.current.id = id;
     effectRef.current.elementOrder = elementOrder;
 
+    /*
+    Function toggles checkbox state
+     */
     const toggleCheckbox = () => setIsChecked(!isChecked);
 
     useEffect(() => {
+        /*
+        If the checkbox was clicked, then code resets others checkboxes and sets state for helping the creation of the child element.
+        Else code returns back the fields in the create new element, making it first.
+         */
         if (isChecked) {
             const childId = effectRef.current.id;
             const newElementOrder = effectRef.current.elementOrder + 1;
@@ -47,11 +57,17 @@ const ListItemCheckbox = ({id, elementOrder}) => {
     }, [isChecked]);
 
     useEffect(() => {
+        /*
+        If new element was added, then all checkboxes are set to the non-checked value.
+         */
         if (isListUpdateRequired)
             setIsChecked(false);
     }, [isListUpdateRequired]);
 
     useEffect(() => {
+        /*
+        If other checkbox is selected, then all except new chosen one are being set to the initial state
+         */
         const activeItemId = effectRef.current.parentItemId;
         const childId = effectRef.current.id;
 

@@ -1,5 +1,8 @@
 import {openDB} from "idb";
 
+/*
+Opens connection to the database
+ */
 export const getDatabase = () => {
     return openDB("groceryItemsDb", 1, {
         upgrade(db) {
@@ -8,6 +11,9 @@ export const getDatabase = () => {
     });
 };
 
+/*
+Add new item to the database
+ */
 export const addItem = async (data) => {
     const db = await getDatabase();
 
@@ -25,6 +31,9 @@ export const addItem = async (data) => {
     }
 };
 
+/*
+Extracts all values from the database
+ */
 export const getListPromise = async () => {
     const listItems = [];
 

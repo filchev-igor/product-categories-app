@@ -2,6 +2,9 @@ import React, {useEffect, useRef} from "react";
 import ListItemCheckbox from "./listItemCheckbox";
 import useChildItem from "../hooks/useChildItem";
 
+/*
+Component displays data, which were filtered
+ */
 const ListGroup = ({list}) => {
     const {
         areCheckboxesReset, setAreCheckboxesReset
@@ -9,6 +12,9 @@ const ListGroup = ({list}) => {
 
     const stateRef = useRef({});
 
+    /*
+    stateRef variable helps to exclude used values from the UseEffect update states
+     */
     stateRef.current.setAreCheckboxesReset = setAreCheckboxesReset;
 
     const items = list.map(value => {
@@ -33,11 +39,17 @@ const ListGroup = ({list}) => {
                 {!price && <ListItemCheckbox id={id} elementOrder={elementOrder}/>}
                 {`${categoryName} ${priceString}`}
 
-                {hasChild && <ListGroup list={child}/>}
+                {/*
+                If this element has child, then listGroup is being called again
+                */
+                    hasChild && <ListGroup list={child}/>}
             </li>);
     });
 
     useEffect(() => {
+        /*
+        After rendering the checkboxes state for resetting their values is being set to the initial (false_ value
+         */
         if (areCheckboxesReset)
             stateRef.current.setAreCheckboxesReset(false);
     }, [areCheckboxesReset]);

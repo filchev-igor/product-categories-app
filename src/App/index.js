@@ -23,6 +23,9 @@ const App = () => {
         listPromise
             .then(array => {
                 const filteredArray = array
+                    /*
+                    Function adds parameters for simplifying filtering child elements
+                     */
                     .map(value => {
                         value.child = [];
                         value.hasChild = false;
@@ -30,6 +33,9 @@ const App = () => {
 
                         return value;
                     })
+                    /*
+                    Function places child elements in the parent container and calculates totalPrice parameter of the parent element
+                     */
                     .filter((value, index, array) => {
                         const currentElementOrder = value.elementOrder;
 

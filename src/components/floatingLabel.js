@@ -11,9 +11,9 @@ const FloatingLabel = props => {
 
     const id = generateUniqueID();
 
-    if (type === "number")
-        console.log("initial", typeof value);
-
+    /*
+    Function updates the value of the input. Additionally function returns the number value, if number type result is being expected.
+     */
     const handleValueUpdate = e => {
         const value = (type === "number") ? Number(e.target.value) : e.target.value;
 
