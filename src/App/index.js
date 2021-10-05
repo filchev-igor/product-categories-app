@@ -26,6 +26,7 @@ const App = () => {
                     .map(value => {
                         value.child = [];
                         value.hasChild = false;
+                        value.totalPrice = 0;
 
                         return value;
                     })
@@ -37,6 +38,9 @@ const App = () => {
 
                             array[parentIndex].child.push(value);
                             array[parentIndex].hasChild = true;
+
+                            if (value.price)
+                                array[parentIndex].totalPrice += value.price;
 
                             return false;
                         }

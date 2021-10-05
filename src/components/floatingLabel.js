@@ -11,16 +11,22 @@ const FloatingLabel = props => {
 
     const id = generateUniqueID();
 
+    if (type === "number")
+        console.log("initial", typeof value);
+
     const handleValueUpdate = e => {
-        setValue(e.target.value);
-    };
+        const value = (type === "number") ? Number(e.target.value) : e.target.value;
+
+        setValue(value);
+    }
 
     return (
         <div className="form-floating mb-3">
             <input
                 type={type}
                 className="form-control"
-                id={id} placeholder={placeholder}
+                id={id}
+                placeholder={placeholder}
                 value={value}
                 onChange={handleValueUpdate}/>
 

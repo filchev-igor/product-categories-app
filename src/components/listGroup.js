@@ -18,11 +18,20 @@ const ListGroup = ({list}) => {
         const elementOrder = value.elementOrder;
         const hasChild = value.hasChild;
         const child = value.child;
+        const totalPrice = value.totalPrice;
+        const priceString = (() => {
+            if (price)
+                return `price: \t\u20AC ${price}`;
+            else if (totalPrice)
+                return `Total price: \t\u20AC ${totalPrice}`;
+            else
+                return "";
+        })();
 
         return (
             <li className="list-group-item" key={id}>
                 {!price && <ListItemCheckbox id={id} elementOrder={elementOrder}/>}
-                {`${categoryName} ${price}`}
+                {`${categoryName} ${priceString}`}
 
                 {hasChild && <ListGroup list={child}/>}
             </li>);
