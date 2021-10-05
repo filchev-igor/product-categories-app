@@ -1,5 +1,5 @@
-import React, {useContext, useEffect, useRef, useState} from "react";
-import {ChildItemContext} from "../contexts";
+import React, {useEffect, useRef, useState} from "react";
+import useChildItem from "../hooks/useChildItem";
 
 const ListItemCheckbox = ({id, elementOrder}) => {
     const {
@@ -8,7 +8,7 @@ const ListItemCheckbox = ({id, elementOrder}) => {
         setElementOrder,
         isListUpdateRequired,
         areCheckboxesReset, setAreCheckboxesReset
-    } = useContext(ChildItemContext);
+    } = useChildItem();
 
     const [isChecked, setIsChecked] = useState(false);
     const effectRef = useRef({});
@@ -27,7 +27,6 @@ const ListItemCheckbox = ({id, elementOrder}) => {
 
     useEffect(() => {
         if (isChecked) {
-            effectRef.current.setAreCheckboxesReset(false);
             const childId = effectRef.current.id;
             const newElementOrder = effectRef.current.elementOrder + 1;
             effectRef.current.setIsParent(false);
@@ -36,6 +35,12 @@ const ListItemCheckbox = ({id, elementOrder}) => {
             effectRef.current.setAreCheckboxesReset(true);
         }
         else {
+            const activeItemId = effectRef.current.parentItemId;
+            const childId = effectRef.current.id;
+
+            if (activeItemId !== childId)
+                return;
+
             effectRef.current.setIsParent(true);
             effectRef.current.setElementOrder(0);
         }
@@ -46,7 +51,6 @@ const ListItemCheckbox = ({id, elementOrder}) => {
             setIsChecked(false);
     }, [isListUpdateRequired]);
 
-    //TODO fix checkbox reset
     useEffect(() => {
         const activeItemId = effectRef.current.parentItemId;
         const childId = effectRef.current.id;

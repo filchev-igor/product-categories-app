@@ -19,8 +19,8 @@ const CreateItem = props => {
     const categoryPlaceholder = `New ${isParent ? "category" : "subcategory"} name`;
 
     const handleNewItem = () => {
-        //if (!window.confirm(ADD_NEW_ITEM))
-            //return false;
+        if (!window.confirm(ADD_NEW_ITEM))
+            return false;
 
         const id = generateUniqueID();
 
@@ -45,11 +45,13 @@ const CreateItem = props => {
 
     const parentElement = list
         .find(value => value.id === parentItemId);
-    const parentString = `It's parent element is ${parentElement?.categoryName} with price of ${parentElement?.price}`;
 
     return (<>
         <div>
-            {`You will add a ${isParent ? "new" : "child"} element. ${!isParent ? parentString : ""}`}
+            {<span>You will add a {isParent ? "new" : "child"} element. </span>}
+            {!isParent && <>
+            <span>It's parent element is </span><span className='fw-bold'>{parentElement?.categoryName}</span>
+            </>}
         </div>
 
         <div className="input-group mb-3">

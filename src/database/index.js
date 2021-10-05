@@ -16,7 +16,7 @@ export const addItem = async (data) => {
         .objectStore('groceryItems');
 
     try {
-        //await store.add(data);
+        await store.add(data);
     }
     catch (err) {
         if (err['categoryName'] === 'ConstraintError') {
