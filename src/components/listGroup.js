@@ -5,7 +5,7 @@ import useChildItem from "../hooks/useChildItem";
 /*
 Component displays data, which were filtered
  */
-const ListGroup = ({list}) => {
+const ListGroup = ({list, hasListGroupFlush = true}) => {
     const {
         areCheckboxesReset, setAreCheckboxesReset
     } = useChildItem();
@@ -37,7 +37,7 @@ const ListGroup = ({list}) => {
         return (
             <li className="list-group-item" key={id}>
                 {!price && <ListItemCheckbox id={id} elementOrder={elementOrder}/>}
-                {`${categoryName} ${priceString}`}
+                <span>{`${categoryName} ${priceString}`}</span>
 
                 {/*
                 If this element has child, then listGroup is being called again
@@ -48,16 +48,16 @@ const ListGroup = ({list}) => {
 
     useEffect(() => {
         /*
-        After rendering the checkboxes state for resetting their values is being set to the initial (false_ value
+        After rendering the checkboxes state for resetting their values is being set to the initial (false) value
          */
         if (areCheckboxesReset)
             stateRef.current.setAreCheckboxesReset(false);
     }, [areCheckboxesReset]);
 
     return (
-        <ul className="list-group">
+        <ol className={`list-group list-group-numbered ${hasListGroupFlush ? "list-group-flush" : ""}`}>
             {items}
-        </ul>
+        </ol>
     )
 };
 

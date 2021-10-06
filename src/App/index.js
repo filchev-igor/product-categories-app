@@ -1,11 +1,11 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import ListGroup from "../components/listGroup";
-import React, {useEffect, useState} from "react";
+import React, {useEffect, useRef, useState} from "react";
 import CreateItem from "../components/createItem";
 import {getListPromise} from "../database";
 import {ChildItemContext} from "../contexts";
 
-const App = () => {
+const App = ({isDatabaseTestAllowed = true}) => {
     const [parentItemId, setParentItemId] = useState('');
     const [isParent, setIsParent] = useState(true);
     const [elementOrder, setElementOrder] = useState(0);
@@ -14,7 +14,14 @@ const App = () => {
     const [isListUpdateRequired, setIsListUpdateRequired] = useState(true);
     const [areCheckboxesReset, setAreCheckboxesReset] = useState(false);
 
+    const isDatabaseTestAllowedRef = useRef(true);
+
+    isDatabaseTestAllowedRef.current = isDatabaseTestAllowed;
+
     useEffect(() => {
+        if (!isDatabaseTestAllowedRef.current)
+            return;
+
         if (!isListUpdateRequired)
             return;
 
@@ -32,6 +39,12 @@ const App = () => {
                         value.totalPrice = 0;
 
                         return value;
+                    })
+                    /*
+                    Elements are sorted by the creation date (asc)
+                     */
+                    .sort((a, b) => {
+                        return a.creationDate - b.creationDate;
                     })
                     /*
                     Function places child elements in the parent container and calculates totalPrice parameter of the parent element
@@ -71,18 +84,27 @@ const App = () => {
         areCheckboxesReset, setAreCheckboxesReset
     };
 
-    return (<>
-        <ChildItemContext.Provider value={childItemProviderValue}>
-            <ListGroup list={filteredList}/>
-        </ChildItemContext.Provider>
+    const createItemProps = {
+        setIsListUpdateRequired: setIsListUpdateRequired,
+        isParent: isParent,
+        elementOrder: elementOrder,
+        parentItemId: parentItemId,
+        list: list,
+        isDatabaseTestAllowed: isDatabaseTestAllowed
+    };
 
-        <CreateItem
-            setIsListUpdateRequired={setIsListUpdateRequired}
-            isParent={isParent}
-            elementOrder={elementOrder}
-            parentItemId={parentItemId}
-            list={list}/>
-        </>);
+    return (
+        <div className="container-fluid">
+            <div className="row justify-content-center">
+                <div className="col-md-8 col-lg-7 mt-3">
+                    <ChildItemContext.Provider value={childItemProviderValue}>
+                        <ListGroup list={filteredList} hasListGroupFlush={false}/>
+                    </ChildItemContext.Provider>
+
+                    <CreateItem {...createItemProps}/>
+                </div>
+            </div>
+        </div>);
 };
 
 export default App;

@@ -1,7 +1,7 @@
 import FloatingLabel from "./floatingLabel";
 import React, {useState} from "react";
 import {ADD_NEW_ITEM} from "../constants";
-import {generateUniqueID} from "web-vitals/dist/modules/lib/generateUniqueID";
+import { v4 as uuidv4 } from 'uuid';
 import {addItem} from "../database";
 
 const CreateItem = props => {
@@ -10,7 +10,8 @@ const CreateItem = props => {
         parentItemId,
         elementOrder,
         list,
-        setIsListUpdateRequired
+        setIsListUpdateRequired,
+        isDatabaseTestAllowed
     } = props;
 
     const [categoryName, setCategoryName] = useState('');
@@ -22,10 +23,20 @@ const CreateItem = props => {
     Function handles data in proper way and puts the result to database method add and sets dependant values to their initial state
      */
     const handleNewItem = () => {
+        if (!categoryName && !price)
+            return;
+
         if (!window.confirm(ADD_NEW_ITEM))
             return false;
 
-        const id = generateUniqueID();
+        if (!isDatabaseTestAllowed) {
+            setCategoryName('');
+            setPrice('');
+
+            return;
+        }
+
+        const id = uuidv4();
 
         const rootCategoryId = isParent ? id : parentItemId;
 
@@ -53,17 +64,19 @@ const CreateItem = props => {
         .find(value => value.id === parentItemId);
 
     return (<>
-        <div>
+        <div className="p-3 text-center">
             {<span>You will add a {isParent ? "new" : "child"} element. </span>}
             {!isParent && <>
-            <span>It's parent element is </span><span className='fw-bold'>{parentElement?.categoryName}</span>
+            <span>It has parent element by the name of </span><span className='fw-bold'>{parentElement?.categoryName}</span>
             </>}
         </div>
 
-        <div className="input-group mb-3">
-            <FloatingLabel placeholder={categoryPlaceholder} value={categoryName} setValue={setCategoryName}/>
-            <FloatingLabel placeholder='price' type="number" value={price} setValue={setPrice}/>
-            <button type="button" className="btn btn-outline-dark" onClick={handleNewItem}>Add</button>
+        <div className="row">
+            <FloatingLabel testId="item input" placeholder={categoryPlaceholder} value={categoryName} setValue={setCategoryName}/>
+            <FloatingLabel testId="price input" placeholder='Price' type="number" value={price} setValue={setPrice}/>
+            <div className="col-2">
+                <button type="button" className="btn btn-outline-dark h-75 w-100" data-testid="add item" onClick={handleNewItem}>Add</button>
+            </div>
         </div>
         </>);
 };
