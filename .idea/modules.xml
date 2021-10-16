@@ -2,7 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/zenitech-test-task.iml" filepath="$PROJECT_DIR$/zenitech-test-task.iml" />
+      <module fileurl="file://$PROJECT_DIR$/product-categories-app.iml" filepath="$PROJECT_DIR$/product-categories-app.iml" />
     </modules>
   </component>
 </project>
